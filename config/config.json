@@ -1,5 +1,5 @@
 {
-    "regex":"",
+    "tokensregex_ner_rules":"/home/michi/repos/KGP_from_Conversations/rules/nodes/mentions.rules",
     "tokensregex_patterns":"../rules/nodes/entities_tokensregex.json",
     "semgrex_patterns":"../rules/nodes/entities_semgrex.rules",
     "ref_objects": "../rules/ref_objects.json",

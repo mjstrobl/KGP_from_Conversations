@@ -29,19 +29,3 @@ ENV.defaults["stage"] = 2
 { ruleType: "tokens", pattern: (([{ner: "RELATION"}]) ([{pos: "POS"}])),action: (Annotate($1, ner, "RELATION"),Annotate($2, ner, "IGNORE"))}
 { ruleType: "tokens", pattern: ([{pos: "PRP$"}]),action: (Annotate($0, ner, "PRP"))}
 { ruleType: "tokens", pattern: ([{pos: "PRP"}]),action: (Annotate($0, ner, "PRP"))}
-
-
-ENV.defaults["stage"] = 3
-#{ ruleType: "tokens", pattern: (([{ner: "RELATION"}]) ([{ner: "NER_PERSON"}])),action: (Annotate($2, ner, "ATTRIBUTIVE_NAME_NER_PERSON"))}
-#{ ruleType: "tokens", pattern: (([{ner: "RELATION"}]|[{ner: "PRP"}]) /name/ /is/ ([{ner: "NER_PERSON"}])),action: (Annotate($2, ner, "ATTRIBUTIVE_NAME_NER_PERSON"),Annotate($2, ref, $1))}
-
-
-{ ruleType: "tokens", pattern: ((([{pos: "PRdsfP$"}])|(([{ner: "PERSdsfON"}]) [{pos: "POSsd"}])) ([{ner: "RELAsdfTION"}])),
-  action: (Annotate($1, ner, "1_INDIVIDUAL"),Annotate($2, ner, "2_INDIVIDUAL"),Annotate($3, ner, "3_INDIVIDUAL"),Annotate($4, ner, "4_INDIVIDUAL")), result: "FOUND_COMPLETE_JOB_TITLE"}
-
-# third phase is a filter phase, and it removes matched expressions that the filter matches
-ENV.defaults["stage"] = 4
-# clean up component named entity tags from stage 1
-{ ruleType: "tokens", pattern: ([{ner:"JOB_TITLE_MODIFIER"} | {ner:"JOB_TITLE_BASE"}]+), action: Annotate($0, ner, "O") }
-# filter out the matched expression "deputy vice president"
-{ ruleType: "filter", pattern: ([{word:"deputy"}] [{word:"vice"}] [{word:"president"}]) }

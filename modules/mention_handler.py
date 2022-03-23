@@ -1,7 +1,4 @@
-from rdflib import Graph, Literal, BNode, Namespace, RDF, URIRef
 from stanza.server import CoreNLPClient, StartServer
-import json
-
 
 class MentionHandler():
 
@@ -10,18 +7,17 @@ class MentionHandler():
         self.props = {
             'pipelineLanguage': 'en',
             'outputFormat': 'json',
-            "regexner.ignorecase": 'true',
+            "ner.model": "edu/stanford/nlp/models/ner/english.conll.4class.distsim.crf.ser.gz",
             "tokensregex.caseInsensitive": 'true',
             "enforceRequirements": "false",
             'annotators': 'coref',
             'coref.algorithm': 'neural',
-            'customAnnotatorClass.custom_ner': 'edu.stanford.nlp.examples.CustomNERAnnotator',
-            'customAnnotatorClass.custom_gender': 'edu.stanford.nlp.examples.CustomGenderAnnotator',
-            "tokensregex.rules": "/home/michi/repos/Conversational_KGP/rules/nodes/mentions.rules",
+            "ner.applyFineGrained": 'false',
+            "tokensregex.rules": config['tokensregex_ner_rules'],
             "ssplit.isOneSentence": "true"
         }
 
-        self.annotators = ['tokenize', 'ssplit', 'pos', 'lemma', 'custom_ner', 'tokensregex', 'entitymentions', 'parse',
+        self.annotators = ['tokenize', 'ssplit', 'pos', 'lemma', 'ner', 'tokensregex', 'entitymentions', 'parse',
                            'depparse', 'coref']
 
         self.client = CoreNLPClient(
@@ -62,8 +58,6 @@ class MentionHandler():
                 if len(extractions) == 0:
                     extractions.append([{"start": start, "end": end, "word": entity, "type": type}])
                 elif extractions[-1][-1]["end"] == start:
-                    # if extractions[-1][-1]['type'] == "RELATION" and type != "IGNORE":
-                    #    type = "ATTRIBUTIVE_" + type
                     extractions[-1].append({"start": start, "end": end, "word": entity, "type": type})
                 else:
                     extractions.append([{"start": start, "end": end, "word": entity, "type": type}])

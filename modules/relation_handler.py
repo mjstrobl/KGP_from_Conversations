@@ -1,5 +1,4 @@
-from rdflib import Graph, Literal, BNode, Namespace, RDF, URIRef
-from stanza.server import CoreNLPClient
+from rdflib import Namespace, URIRef
 from pathlib import Path
 import json
 
