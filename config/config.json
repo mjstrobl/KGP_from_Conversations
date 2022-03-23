@@ -1,0 +1,12 @@
+{
+    "regex":"",
+    "tokensregex_patterns":"../rules/nodes/entities_tokensregex.json",
+    "semgrex_patterns":"../rules/nodes/entities_semgrex.rules",
+    "ref_objects": "../rules/ref_objects.json",
+    "regex_patterns":"../rules/entities_regex.json",
+    "linker": "../rules/linker.json",
+    "relations": "../rules/edges/relationships.json",
+    "loggingpath": "../logging/",
+    "graphpath": "../logging/graphs/",
+    "metadatapath": "../logging/metadata/"
+}

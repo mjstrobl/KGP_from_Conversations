@@ -1,0 +1,5 @@
+[
+  {"pattern": "{word:/born/} >nsubjpass {}=subject >/nmod:in/ {}=object",
+  "comment": "John was born in Edmonton."
+  }
+]

@@ -1,0 +1,23 @@
+{
+    "RELATION": {
+        "query": ["SELECT ?entity WHERE { ?previous_entity ?relation ?entity . }",["previous_entity","relation"]],
+        "insert": ["INSERT DATA { ?previous_entity ?relation ?entity . ?entity <http://schema.org/type> ?ner . }",["previous_entity","relation","entity","ner"]]
+    },
+    "RELATIONINVERSE": {
+        "query": ["SELECT ?entity WHERE { ?entity ?relation ?previous_entity . }",["relation","previous_entity"]],
+        "insert": ["INSERT DATA { ?entity ?relation ?previous_entity . ?entity <http://schema.org/type> ?ner . }",["entity","relation","previous_entity","ner"]]
+    },
+    "RELATIONATTRIBUTIVE": {
+        "queries": [
+            ["SELECT ?entity WHERE { ?previous_entity ?relation ?entity . ?entity ?attribute_relation ?word . }",
+                ["previous_entity","word","relation"]],
+            ["SELECT ?entity WHERE { ?previous_entity ?relation ?entity . ?entity ?attribute_relation ?name . FILTER ( ?word = ?name ) }",
+                ["previous_entity","word","relation"]]
+        ],
+        "insert": ["INSERT DATA { ?previous_entity ?relation ?entity . ?entity ?attribute_relation ?word ; <http://schema.org/type> ?ner . }",["previous_entity","entity","relation","word","ner"]]
+    },
+    "NER": {
+        "query": ["SELECT ?entity WHERE { ?entity <http://schema.org/name> ?word ; <http://schema.org/type> ?ner . }",["word","ner"]],
+        "insert": ["INSERT DATA { ?entity <http://schema.org/name> ?word ; <http://schema.org/type> ?ner . }",["entity","word","ner"]]
+    }
+}

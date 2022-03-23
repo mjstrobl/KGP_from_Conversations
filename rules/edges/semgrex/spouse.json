@@ -1,0 +1,13 @@
+[
+  {"pattern": "{}=subject >/conj:and/ ( {}=object <nsubjpass {word:/married/} ) <nsubjpass {word:/married/}",
+  "comment": "John and Victoria are married."
+  },
+  {"pattern": "{word:/married/} >nsubj {}=subject >dobj {}=object",
+  "comment": "John married Mia."
+  },
+  {"pattern": "{word:/married/} >nsubjpass {}=subject >/nmod:to/ {}=object",
+  "comment": "John, who is married to Mia, ..."
+  }
+]
+
+

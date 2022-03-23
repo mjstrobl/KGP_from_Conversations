@@ -1,0 +1,47 @@
+# uncomment to make all patterns case-insensitive in the rules file
+# ENV.defaultStringMatchFlags = 66
+# ENV.defaultStringPatternFlags = 66
+
+# these Java classes will be used by the rules
+ner = { type: "CLASS", value: "edu.stanford.nlp.ling.CoreAnnotations$NamedEntityTagAnnotation" }
+tokens = { type: "CLASS", value: "edu.stanford.nlp.ling.CoreAnnotations$TokensAnnotation" }
+
+# variables for complex regexes
+$RELATIONS = "/brother|sister|sibling|mother|mom|mum|father|dad|parent|aunt|uncle|grandmother|grandfather|cousin|niece|nephew|husband|wife|spouse/"
+$RELATIONS_INVERSE = "/child|daughter|son/"
+# first phase identifies components of job titles
+# a TokensRegex pipeline can run various stages
+# to specify a particular stage, set ENV.defaults["stage"] to the stage number
+ENV.defaults["stage"] = 1
+
+# tokens match phase
+{ ruleType: "tokens", pattern: ([{word:$RELATIONS}]), action: Annotate($0, ner, "RELATION") }
+{ ruleType: "tokens", pattern: ([{word:$RELATIONS_INVERSE}]), action: Annotate($0, ner, "RELATIONINVERSE") }
+{ ruleType: "tokens", pattern: ([{ner:/B-PERSON/}] [{ner:/I-PERSON/}]*), action: Annotate($0, ner, "NER_PERSON") }
+{ ruleType: "tokens", pattern: ([{ner:/B-ORGANIZATION/}] [{ner:/I-ORGANIZATION/}]*), action: Annotate($0, ner, "NER_ORGANIZATION") }
+{ ruleType: "tokens", pattern: ([{ner:/B-LOCATION/}] [{ner:/I-LOCATION/}]*), action: Annotate($0, ner, "NER_LOCATION") }
+{ ruleType: "tokens", pattern: ([{ner:/B-MISC/}] [{ner:/I-MISC/}]*), action: Annotate($0, ner, "NER_MISC") }
+{ ruleType: "tokens", pattern: ([{ner:/B-FOOD/}] [{ner:/I-FOOD/}]*), action: Annotate($0, ner, "NER_FOOD") }
+
+# second phase identifies complete job titles from components found in first phase
+ENV.defaults["stage"] = 2
+{ ruleType: "tokens", pattern: (([{ner: "NER_PERSON"}]) ([{pos: "POS"}])),action: (Annotate($1, ner, "NER_PERSON"),Annotate($2, ner, "IGNORE"))}
+{ ruleType: "tokens", pattern: (([{ner: "RELATION"}]) ([{pos: "POS"}])),action: (Annotate($1, ner, "RELATION"),Annotate($2, ner, "IGNORE"))}
+{ ruleType: "tokens", pattern: ([{pos: "PRP$"}]),action: (Annotate($0, ner, "PRP"))}
+{ ruleType: "tokens", pattern: ([{pos: "PRP"}]),action: (Annotate($0, ner, "PRP"))}
+
+
+ENV.defaults["stage"] = 3
+#{ ruleType: "tokens", pattern: (([{ner: "RELATION"}]) ([{ner: "NER_PERSON"}])),action: (Annotate($2, ner, "ATTRIBUTIVE_NAME_NER_PERSON"))}
+#{ ruleType: "tokens", pattern: (([{ner: "RELATION"}]|[{ner: "PRP"}]) /name/ /is/ ([{ner: "NER_PERSON"}])),action: (Annotate($2, ner, "ATTRIBUTIVE_NAME_NER_PERSON"),Annotate($2, ref, $1))}
+
+
+{ ruleType: "tokens", pattern: ((([{pos: "PRdsfP$"}])|(([{ner: "PERSdsfON"}]) [{pos: "POSsd"}])) ([{ner: "RELAsdfTION"}])),
+  action: (Annotate($1, ner, "1_INDIVIDUAL"),Annotate($2, ner, "2_INDIVIDUAL"),Annotate($3, ner, "3_INDIVIDUAL"),Annotate($4, ner, "4_INDIVIDUAL")), result: "FOUND_COMPLETE_JOB_TITLE"}
+
+# third phase is a filter phase, and it removes matched expressions that the filter matches
+ENV.defaults["stage"] = 4
+# clean up component named entity tags from stage 1
+{ ruleType: "tokens", pattern: ([{ner:"JOB_TITLE_MODIFIER"} | {ner:"JOB_TITLE_BASE"}]+), action: Annotate($0, ner, "O") }
+# filter out the matched expression "deputy vice president"
+{ ruleType: "filter", pattern: ([{word:"deputy"}] [{word:"vice"}] [{word:"president"}]) }

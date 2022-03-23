@@ -1,0 +1,5 @@
+[
+  {"pattern": "([!{ner:\"O\"}]) /was/ /born/ /in/ ([!{ner:\"O\"}])",
+  "comment": "John was born in Edmonton"
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {"pattern": "([!{ner:\"O\"}]) /lives/ /in/ ([!{ner:\"O\"}])",
+  "comment": "John lives in Edmonton."
+  },
+  {"pattern": "([!{ner:\"O\"}]) /is/ /from/ ([!{ner:\"O\"}])",
+  "comment": "John is from Edmonton."
+  }
+]

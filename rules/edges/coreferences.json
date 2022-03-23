@@ -1,0 +1,7 @@
+[
+  {
+    "pattern": "([!{ner:\"O\"}]) /is/ ([!{ner:\"O\"}])",
+    "order": "reverse",
+    "comment": "John is my neighbour."
+  }
+]

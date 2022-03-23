@@ -1,0 +1,9 @@
+[
+  {"pattern": "{}=subject <nsubj ( {lemma:/live/} >/nmod:in/ {}=object )",
+  "comment": "John lives in Edmonton."
+  },
+  {"pattern": "{}=object >nsubj {}=subject >cop {lemma:/be/} >case {word:/from/}",
+  "comment": "John is from Edmonton."
+  }
+]
+

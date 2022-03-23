@@ -1,0 +1,23 @@
+[
+  {
+    "pattern": "([!{ner:\"O\"}]) [{ner:\"IGNORE\"}]{0,1} /name/ /is/ ([!{ner:\"O\"}])",
+    "subject": "1",
+    "object": "2",
+    "relation": "name",
+    "comment": "Her name is Sarah."
+  },
+  {
+    "pattern": "(\"I\") /'m/ ([!{ner:\"O\"}])",
+    "subject": "1",
+    "object": "2",
+    "relation": "name",
+    "comment": "I'm Sarah."
+  },
+  {
+    "pattern": "([{ner:/RELATION.*/}]) ([{ner:/NER_.*/}]+)",
+    "subject": "1",
+    "object": "2",
+    "relation": "name",
+    "comment": "His sister Sarah."
+  }
+]

@@ -1,0 +1,76 @@
+{
+  "sibling": {
+    "arguments": [
+      "PERSON",
+      "PERSON"
+    ],
+    "names": [
+      "brother",
+      "sister",
+      "sibling"
+    ]
+  },
+  "child_of": {
+    "arguments": [
+      "PERSON",
+      "PERSON"
+    ],
+    "names": [
+      "mother",
+      "mom",
+      "mum",
+      "father",
+      "dad",
+      "parent"
+    ],
+    "inverse_names" : [
+      "child",
+      "daughter",
+      "son"
+    ]
+  },
+  "relative": {
+    "arguments": [
+      "PERSON",
+      "PERSON"
+    ],
+    "names": [
+      "aunt",
+      "uncle",
+      "grandmother",
+      "grandfather",
+      "cousin",
+      "niece",
+      "nephew"
+    ]
+  },
+  "spouse": {
+    "arguments": [
+      "PERSON",
+      "PERSON"
+    ],
+    "names": [
+      "husband",
+      "wife",
+      "spouse"
+    ]
+  },
+  "lives_in": {
+    "arguments": [
+      "PERSON",
+      "LOCATION"
+    ]
+  },
+  "born_in": {
+    "arguments": [
+      "PERSON",
+      "LOCATION"
+    ]
+  },
+  "likes": {
+    "arguments": [
+      "PERSON",
+      "FOOD"
+    ]
+  }
+}

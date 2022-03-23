@@ -1,0 +1,11 @@
+[
+  {"pattern": "([!{ner:\"O\"}]) /and/ ([!{ner:\"O\"}]{1,20}) /are/ /married/",
+  "comment": "John and Sarah are married."
+  },
+  {"pattern": "([!{ner:\"O\"}]) /married/ ([!{ner:\"O\"}])",
+  "comment": "John married Sarah."
+  },
+  {"pattern": "([!{ner:\"O\"}]) /is/ /married/ /to/ ([!{ner:\"O\"}])",
+  "comment": "John is married to Sarah."
+  }
+]
