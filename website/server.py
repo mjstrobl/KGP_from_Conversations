@@ -5,7 +5,8 @@ from http.server import HTTPServer,SimpleHTTPRequestHandler
 from modules.pipeline import Pipeline
 
 from pathlib import Path
-import random
+from os import listdir
+from os.path import isfile, join
 import json
 import string
 from datetime import datetime
@@ -74,38 +75,41 @@ def MakeHandlerClassFromArgv(logging_file, pipeline, config):
                 self.send_response_to_client(json.dumps(response_dict))
             elif type == 3:
                 # save graph to file.
-                response_dict = {"type": 1, "response": "Graph saved to file. Please keep your UID in mind to request the graph from file."}
+                response_dict = {"type": 1, "response": "Graph saved to file."}
                 self.send_response_to_client(json.dumps(response_dict))
 
-                graph_output_filename = self.config['graphpath'] + self.pipeline.metadata['uid'] + '.ttl'
+                date_time = datetime.now().strftime("%m_%d_%Y_%H_%M_%S_")
+                graph_output_filename = self.config['graphpath'] + date_time + '.ttl'
+
                 self.pipeline.g.serialize(destination=graph_output_filename, format='turtle')
-                with open(self.config['metadatapath'] + self.pipeline.metadata['uid'] + '.json','w') as f:
+                with open(self.config['metadatapath'] + date_time + '.json','w') as f:
                     json.dump(self.pipeline.metadata, f)
 
             elif type == 4:
                 # load graph from file and send back.
-                requested_uid = text
-                requested_graph_filename = self.config['graphpath'] + requested_uid + '.ttl'
 
-                graph_file = Path(requested_graph_filename)
-                if graph_file.is_file():
+                graph_files = [f for f in listdir(self.config['graphpath']) if isfile(join(self.config['graphpath'], f))]
+
+                graph_files.sort()
+
+                if len(graph_files) > 0:
+                    latest_graph_file = graph_files[-1]
+
+                    requested_graph_filename = self.config['graphpath'] + latest_graph_file
+
                     self.pipeline.g = Graph()
                     self.pipeline.g.parse(requested_graph_filename, format="ttl")
-                    self.pipeline.metadata = json.load(open(config['metadatapath'] + requested_uid + '.json'))
+                    self.pipeline.metadata = json.load(open(config['metadatapath'] + latest_graph_file[:-4] + '.json'))
 
-                    response = "Graph loaded from file. New UID: " + self.pipeline.metadata['uid']
+                    response = "Graph loaded from file."
                     self.create_graph(response)
                     json_string = json.dumps(self.dictionary)
                     self.send_response_to_client(json_string)
 
-                    self.logging_file = open(config['loggingpath'] + datetime.now().strftime("%m_%d_%Y_%H_%M_%S_") + requested_uid + ".log", 'w')
+                    self.logging_file = open(config['loggingpath'] + datetime.now().strftime("%m_%d_%Y_%H_%M_%S_") + ".log", 'w')
                 else:
-                    response_dict = {"type": 1, "response": "Graph file for requested UID does not exist."}
+                    response_dict = {"type": 1, "response": "No Graph file available."}
                     self.send_response_to_client(json.dumps(response_dict))
-            elif type == 5:
-                # website started.
-                response_dict = {"type": 1, "response": "Hi, I'm ANA. Your UID: " + self.pipeline.metadata['uid']}
-                #self.send_response_to_client(json.dumps(response_dict))
 
             date_time = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
             self.logging_file.write(prefix + "\t" + date_time + '\t' + text + "\n")
@@ -196,12 +200,11 @@ def MakeHandlerClassFromArgv(logging_file, pipeline, config):
 def init_variables():
     config = json.load(open('../config/config.json'))
     g = Graph()
-    uid = ''.join([random.choice(chars) for i in range(8)])
-    metadata = {"rel_names": {}, "entities": {}, "sent_idx": 0, "uid": uid}
+    metadata = {"rel_names": {}, "entities": {}, "sent_idx": 0}
     pipeline = Pipeline(g)
     pipeline.setup(config, metadata)
     date_time = datetime.now().strftime("%m_%d_%Y_%H_%M_%S_")
-    logging_file = open(config['loggingpath'] + date_time + uid + ".log", 'w')
+    logging_file = open(config['loggingpath'] + date_time + ".log", 'w')
 
     return logging_file, pipeline, config
 
