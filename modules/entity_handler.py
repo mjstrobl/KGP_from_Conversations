@@ -166,7 +166,24 @@ class EntityHandler:
                     entity['relation'] = URIRef(SCHEMA_ORG_NAMESPACE + self.relation_mapper[word]["relation"]).n3()
                     entity['ner'] = arguments["ner"]
                     entity['previous_entities'] = arguments['previous_entities']
-                elif type == "NER":
+
+                elif type.startswith("PRP"):
+                    idx_list.append(i)
+                    # here we need to see if there is a coreference entity
+                    if 'chain_idx' in entity and entity['chain_idx'] in found_corefs:
+                        entity['entities'] = [(found_corefs[entity['chain_idx']], 1)]
+                        if "attribute" in entity:
+                            inserts = [["INSERT DATA { ?entity ?attribute_relation ?attribute_word . }",
+                                        ["entity", "attribute_relation", "attribute_word"]]]
+                            entity['attribute_relation'] = entity["attribute"]["relation"]
+                            entity['attribute_word'] = entity["attribute"]["word"]
+                            entity_idxs.extend(entity['attribute']['idxs'])
+                            entity['inserts'] = inserts
+                    else:
+                        break
+                elif type != "O" and type != "ATTRIBUTIVE" and type != "IGNORE" and type != "NUMBER":
+                    ner_type = type
+                    type = "NER"
                     idx_list.append(i)
                     # just look for all entities matching type and name.
                     # again, the previous entity is only set if there was an entity found.
@@ -193,25 +210,15 @@ class EntityHandler:
                             entity['attribute_word'] = entity["attribute"]["word"]
                             entity_idxs.extend(entity['attribute']['idxs'])
 
+                    print(arguments)
                     entity['entities'] = candidates
                     entity['inserts'] = inserts
-                    entity['ner'] = arguments["ner"]
+                    #entity['ner'] = arguments["ner"]
+                    #entity['ner'] = ner_type
+                    entity["ner"] = URIRef(SCHEMA_ORG_NAMESPACE + ner_type).n3()
                     entity['word'] = word
 
-                elif type == "PRP":
-                    idx_list.append(i)
-                    # here we need to see if there is a coreference entity
-                    if 'chain_idx' in entity and entity['chain_idx'] in found_corefs:
-                        entity['entities'] = [(found_corefs[entity['chain_idx']], 1)]
-                        if "attribute" in entity:
-                            inserts = [["INSERT DATA { ?entity ?attribute_relation ?attribute_word . }",
-                                        ["entity", "attribute_relation", "attribute_word"]]]
-                            entity['attribute_relation'] = entity["attribute"]["relation"]
-                            entity['attribute_word'] = entity["attribute"]["word"]
-                            entity_idxs.extend(entity['attribute']['idxs'])
-                            entity['inserts'] = inserts
-                    else:
-                        break
+
 
             response.append(current_response)
 

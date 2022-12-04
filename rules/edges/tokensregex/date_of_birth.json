@@ -1,0 +1,5 @@
+[
+  {"pattern": "([{pos:\"PRP\"}|{ner:\"PERSON\"}]) /was/ /born/ /in/ ([{ner:\"DATE\"}])",
+  "comment": "John was born in 1930"
+  }
+]

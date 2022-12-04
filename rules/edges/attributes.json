@@ -1,6 +1,13 @@
 [
   {
-    "pattern": "([!{ner:\"O\"}]) [{ner:\"IGNORE\"}]{0,1} /name/ /is/ ([!{ner:\"O\"}])",
+    "pattern": "([{ner:\"O\"}]) [{word:\"'s\"}] /name/ /is/ ([!{ner:\"O\"}])",
+    "subject": "1",
+    "object": "2",
+    "relation": "name",
+    "comment": "my wife's name is Sarah."
+  },
+  {
+    "pattern": "([{tag:\"PRP$\"}]) /name/ /is/ ([!{ner:\"O\"}])",
     "subject": "1",
     "object": "2",
     "relation": "name",

@@ -61,6 +61,12 @@
       "LOCATION"
     ]
   },
+  "date_of_birth": {
+    "arguments": [
+      "PERSON",
+      "DATE"
+    ]
+  },
   "born_in": {
     "arguments": [
       "PERSON",
@@ -71,6 +77,12 @@
     "arguments": [
       "PERSON",
       "FOOD"
+    ]
+  },
+  "family_doctor": {
+    "arguments": [
+      "PERSON",
+      "PERSON"
     ]
   }
 }

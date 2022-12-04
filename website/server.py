@@ -108,7 +108,7 @@ def MakeHandlerClassFromArgv(logging_file, pipeline, config):
 
                     self.logging_file = open(config['loggingpath'] + datetime.now().strftime("%m_%d_%Y_%H_%M_%S_") + ".log", 'w')
                 else:
-                    response_dict = {"type": 1, "response": "No Graph file available."}
+                    response_dict = {"type": 0, "response": "No Graph file available."}
                     self.send_response_to_client(json.dumps(response_dict))
 
             date_time = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
@@ -117,7 +117,6 @@ def MakeHandlerClassFromArgv(logging_file, pipeline, config):
         def create_graph(self, response):
             for s, p, o in self.pipeline.g:
                 print((s, p, o))
-
 
             graph_strings = []
             for s, p, o in self.pipeline.g:

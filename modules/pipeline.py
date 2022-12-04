@@ -1,5 +1,5 @@
 import json
-from rdflib import Graph, Namespace
+from rdflib import Graph, Namespace, URIRef, Literal
 from modules.mention_handler import MentionHandler
 from modules.attribute_handler import AttributeHandler
 from modules.entity_handler import EntityHandler
@@ -50,6 +50,7 @@ class Pipeline():
 
         for s, p, o in self.g:
             print((s, p, o))
+
         #visualize_graph(self.g)
 
         response = ''

@@ -32,6 +32,8 @@
 </div>
 
 <script type="text/javascript">
+    add_message("Hello, my name is Ana. What is your name?", "botText")
+
     $("#textInput").keypress(function(e) {
         console.log("keypress")
         if(e.which == 13) {
@@ -212,7 +214,7 @@
                 return 'edge' + i
             })
             .attr('marker-end', 'url(#arrowhead)')
-            .style("stroke", "#ccc")
+            .style("stroke", "#444444")
             .style("pointer-events", "none");
 
         var nodes = svg.selectAll("circle")
@@ -276,7 +278,7 @@
                 'dx': 80,
                 'dy': 0,
                 'font-size': 10,
-                'fill': '#aaa'
+                'fill': '#444444'
             });
 
         edgelabels.append('textPath')
@@ -303,8 +305,8 @@
             })
             .append('svg:path')
             .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
-            .attr('fill', '#ccc')
-            .attr('stroke', '#ccc');
+            .attr('fill', '#444444')
+            .attr('stroke', '#444444');
 
 
         force.on("tick", function () {

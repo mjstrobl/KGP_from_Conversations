@@ -47,6 +47,9 @@ class RelationHandler():
                             print(entity_mentions_index)
                             object_index = match["$object"]["begin"]
                             subject_index = match["$subject"]["begin"]
+
+                            # TODO: We may need to fix this, right now it is not possible to have a relation from the same subject to the same object.
+                            print(found_relations)
                             if object_index in entity_mentions_index and subject_index in entity_mentions_index and str(subject_index) + "_" + str(object_index) + "_" + relation not in found_relations:
                                 subject = entity_mentions_index[subject_index]
                                 object = entity_mentions_index[object_index]
@@ -68,6 +71,7 @@ class RelationHandler():
                                 print(object_type)
 
                                 if (subject, URIRef("http://schema.org/type"), subject_type) in g and (object, URIRef("http://schema.org/type"), object_type) in g:
+
                                     g.add((subject, URIRef(SCHEMA_ORG_NAMESPACE + relation), object))
 
                                     print("subject: " + str(subject_index))
@@ -103,6 +107,11 @@ class RelationHandler():
                             subject_index = match["1"]["begin"]
                             object_index = match["2"]["begin"]
 
+                            print("subject")
+                            print(match["1"])
+                            print("object")
+                            print(match["2"])
+
                             if object_index in entity_mentions_index and subject_index in entity_mentions_index:
                                 subject = entity_mentions_index[subject_index]
                                 object = entity_mentions_index[object_index]
@@ -116,7 +125,7 @@ class RelationHandler():
                                 print("1 object type")
                                 print(object_type)
 
-                                if (subject,URIRef("http://schema.org/type"),subject_type) in g and (object,URIRef("http://schema.org/type"),object_type) in g:
+                                if (subject, URIRef("http://schema.org/type"), subject_type) in g and (object, URIRef("http://schema.org/type"), object_type) in g:
 
                                     g.add((subject, URIRef(SCHEMA_ORG_NAMESPACE + relation), object))
 

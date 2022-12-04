@@ -1,0 +1,8 @@
+[
+  {"pattern": "([{tag:\"PRP$\"}]) /doctor/ /is/ [{word:\"Dr.\"}]+ ([{ner:\"PERSON\"}])",
+  "comment": "My doctor is ..."
+  },
+  {"pattern": "([!{ner:\"O\"}]) /doctor/ /is/ [{word:/Dr./}]{0,1} ([{ner:\"PERSON\"}])",
+  "comment": "John's doctor is ..."
+  }
+]
